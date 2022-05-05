@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Image, ImageBackground, Pressable, StyleSheet, View } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import firebase from '../utils/firebase'
 
 import { UserContext } from '../userContext';
 
@@ -11,7 +12,7 @@ export const GlobalContainer : React.FC<any> = ( {children, navigation} ) => {
   return (
     <ImageBackground source={ require( '../assets/background.jpg' ) } style={ styles.background }>
       {user.email && navigation?
-        <Pressable style={ styles.logoutButton }  onPress={ () => { user.email = ""; navigation.navigate('LogIn') } }>
+        <Pressable style={ styles.logoutButton }  onPress={ () => { firebase.auth().signOut() ;user.email = ""; navigation.navigate('LogIn') } }>
           <Image style={ styles.logoutImage } source={ require('../assets/logout.png') }/>
         </Pressable>
         : undefined
