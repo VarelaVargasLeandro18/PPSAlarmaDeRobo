@@ -13,5 +13,8 @@ export const styles = StyleSheet.create({
     },
     buttonDesactivado: {
         backgroundColor: '#C4C4C455'
+    },
+    textWhite: {
+        color: '#ffffffff'
     }
 });

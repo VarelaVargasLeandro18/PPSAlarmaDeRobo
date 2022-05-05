@@ -1,16 +1,11 @@
 import { Merienda_400Regular, useFonts } from '@expo-google-fonts/merienda';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { ActivityIndicator, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 import { Home } from './screens/Home/home';
 import { LogInContainer } from './screens/LogIn/loginContainer';
 import { Splash } from './screens/Splash/Splash';
-
-const theme = {
-  ...DefaultTheme,
-  fontFamily: {...DefaultTheme.fonts.regular.fontFamily = 'Merienda_400Regular'} 
-};
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +14,7 @@ export default function App() {
     Merienda_400Regular
   });
 
-  if ( !fontsLoaded ) return null
+  if ( !fontsLoaded ) return <ActivityIndicator/>
 
   return (
     <PaperProvider>
