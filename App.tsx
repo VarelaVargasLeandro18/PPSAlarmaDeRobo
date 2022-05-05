@@ -6,6 +6,7 @@ import { ActivityIndicator, DefaultTheme, Provider as PaperProvider } from 'reac
 import { Home } from './screens/Home/home';
 import { LogInContainer } from './screens/LogIn/loginContainer';
 import { Splash } from './screens/Splash/Splash';
+import { UserContext } from './userContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,21 +18,23 @@ export default function App() {
   if ( !fontsLoaded ) return <ActivityIndicator/>
 
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash" screenOptions={ { headerShown: false } }>
-          <Stack.Screen
-            name="LogIn"
-            component={LogInContainer}/>
-          <Stack.Screen
-            name='Home'
-            component={Home}/>
-          <Stack.Screen
-            name="Splash"
-            component={Splash}
-            initialParams={ {to: "LogIn"} }/>
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <UserContext.Provider value={{email: ""}}>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Splash" screenOptions={ { headerShown: false } }>
+            <Stack.Screen
+              name="LogIn"
+              component={LogInContainer}/>
+            <Stack.Screen
+              name='Home'
+              component={Home}/>
+            <Stack.Screen
+              name="Splash"
+              component={Splash}
+              initialParams={ {to: "LogIn"} }/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </UserContext.Provider>
   );
 }

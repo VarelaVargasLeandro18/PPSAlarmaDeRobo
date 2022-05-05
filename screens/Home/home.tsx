@@ -7,7 +7,7 @@ import { ActivityIndicator, Divider, Title } from 'react-native-paper';
 import { GlobalContainer } from '../../components/centeredVHContainer';
 import { styles } from './styles';
 
-export const Home = ( ) => {
+export const Home = ( {navigation} : any) => {
     const [activado, setActivado] = useState<boolean>(false);
     const [acelerometroData, setAcelerometroData] = useState<ThreeAxisMeasurement>();
     const [magnetometerData, setMagnetometerData] = useState<ThreeAxisMeasurement>();
@@ -105,7 +105,7 @@ export const Home = ( ) => {
     if ( !acelerometroData || !magnetometerData ) return <ActivityIndicator/>
 
     return (
-    <GlobalContainer>
+    <GlobalContainer navigation={navigation}>
         <View style={styles.container}>
             <Title style={styles.textWhite}>Acelerómetro:</Title>
             <Title style={styles.textWhite}>X: {Math.round(acelerometroData.x * 100)}</Title>

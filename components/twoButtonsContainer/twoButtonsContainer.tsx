@@ -25,7 +25,7 @@ export const TwoButtonsContainer = (
         secondButtonText 
     } : ITwoButtonsContainerProps ) => (
     <View style={containerStyle}>
-        <Button style={firstButtonStyle} mode="contained" onPress={firstButtonOnPress}>
+        <Button  style={firstButtonStyle} mode="contained" onPress={firstButtonOnPress}>
             <Text style={firstButtonTextStyle}>{firstButtonText}</Text>
         </Button>
         <Button mode="text" onPress={secondButtonOnPress}>

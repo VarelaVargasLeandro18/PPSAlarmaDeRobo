@@ -7,26 +7,25 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
         height: heightPercentageToDP('60%'),
         width: widthPercentageToDP('80%'),
-        backgroundColor: '#C4C4C47F',
     },
     image: {
-        width: 150,
-        height: 150,
-        position: 'relative',
-        marginHorizontal: ((widthPercentageToDP('100%') - 150) / 3),
-        top: -100,
-        zIndex: -1
+        width: 250,
+        height: 250,
+        alignSelf: 'center'
     },
     inputTransparent: {
-        backgroundColor: 'transparent'
+        backgroundColor: '#84A0A47F'
     },
     buttonLogIn: {
-        width: widthPercentageToDP('60%'),
+        width: 150,
+        height: 150,
         alignSelf: 'center',
-        backgroundColor: '#D3B7547F',
+        justifyContent:'center',
+        borderRadius: 125,
+        backgroundColor: '#6ED3547F',
     },
     buttonText: {
         fontFamily: 'Merienda_400Regular',
-        color: '#000000FF',
+        color: '#FFFF',
     }
 })

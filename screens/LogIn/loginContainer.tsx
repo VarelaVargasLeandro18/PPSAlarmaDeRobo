@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FAB } from 'react-native-paper';
 
 import { logIn } from '../../services/accountService';
@@ -7,6 +7,7 @@ import { showToastAndroid } from '../../utils/showToastAndroid';
 import { GlobalContainer } from '../../components/centeredVHContainer';
 import { LogIn } from './login';
 import { logInDefaultMessages } from './logInMessages';
+import { UserContext } from '../../userContext';
 
 
 const unsuccessfullLogIn = ( reason : any ) => {
@@ -21,6 +22,7 @@ export const LogInContainer = ( { navigation } : any ) => {
     const [open, setOpen] = React.useState<boolean>(false);
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
+    const user = useContext( UserContext );
 
     const handleLogIn = () => {
         if ( 
@@ -31,6 +33,7 @@ export const LogInContainer = ( { navigation } : any ) => {
         logIn( email, password )
             .then( () => {
                 showToastAndroid( logInDefaultMessages.logInSuccess );
+                user.email = email;
                 setEmail("");
                 setPassword("");
                 navigation.navigate( "Home" );

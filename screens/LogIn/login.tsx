@@ -30,7 +30,7 @@ export const LogIn = ( { email, setEmail, password, setPassword, navigation, han
         firstButtonStyle: styles.buttonLogIn,
         firstButtonOnPress: handleLogIn,
         firstButtonTextStyle: styles.buttonText,
-        firstButtonText: "Iniciar Sesión",
+        firstButtonText: "Iniciar",
         secondButtonStyle: undefined,
         secondButtonTextStyle: undefined,
         secondButtonOnPress: undefined,

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontFamily: 'Merienda_400Regular',
-        color: '#000f',
+        color: '#ffff',
         textAlign: 'center',
         fontSize: 30,
         flexWrap: 'wrap',
