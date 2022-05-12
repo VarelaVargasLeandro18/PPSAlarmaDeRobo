@@ -1,4 +1,5 @@
 import { Sound } from 'expo-av/build/Audio';
+import { Camera } from 'expo-camera';
 import { Accelerometer, Magnetometer, ThreeAxisMeasurement } from 'expo-sensors';
 import { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
@@ -17,13 +18,16 @@ export const Home = ( {navigation} : any) => {
     const [reproducirVer, setReproducirVer] = useState<boolean>(false);
     const [reproducirHor, setReproducirHor] = useState<boolean>(false);
     const updateInterval = 250;
+    const [flash, setFlash] = useState<"off" | "torch">("off");
 
     const [timeoutIzq, setTimeoutIzq] = useState<NodeJS.Timeout>();
     const [timeoutDer, setTimeoutDer] = useState<NodeJS.Timeout>();
     const [timeoutVer, setTimeoutVer] = useState<NodeJS.Timeout>();
     const [timeoutHor, setTimeoutHor] = useState<NodeJS.Timeout>();
+    const [type, setType] = useState(Camera.Constants.Type.back);
 
     useEffect( () => {
+        Camera.requestCameraPermissionsAsync();
         Magnetometer.requestPermissionsAsync();
         Accelerometer.requestPermissionsAsync();
 
@@ -39,6 +43,7 @@ export const Home = ( {navigation} : any) => {
     }, [] );
 
     useEffect( () => {
+        if ( !activado ) setFlash("off");
         if ( !magnetometerData ) return
         setMagnetometerDataReposo( magnetometerData );
     }, [activado] );
@@ -48,23 +53,24 @@ export const Home = ( {navigation} : any) => {
         if ( !activado ) return
         if ( reproducirVer || reproducirHor || reproducirIzq || reproducirDer ) return
 
-        const ver = Math.round(acelerometroData.x * 100);
-        const hor = Math.round(acelerometroData.y * 100);
+        const hor = Math.round(acelerometroData.x * 100);
+        const ver = Math.round(acelerometroData.y * 100);
         
-        if ( (ver >= 90 && ver > 0) || (ver <= -90 && ver < 0) ) {
+        if ( (hor >= 90 && hor > 0) || (hor <= -90 && hor < 0) ) {
+            setReproducirHor( true );
             Sound.createAsync( require('../../assets/tshtDejaEsoWachin.m4a') )
-                .then( ({sound}) => sound.playAsync() )
-                .catch( e => console.error(e) );
-            setReproducirVer( true );
-            setTimeoutIzq(setTimeout( () => setReproducirVer(false), 5000 ));
+            .then( ({sound}) => sound.playAsync() )
+            .then( () => setTimeoutIzq(setTimeout( () => {setReproducirHor(false); }, 5000 )) )
+            .catch( e => console.error(e) );
         }
-
-        if ( (hor >= 90 && hor > 0) ) {
+        
+        if ( (ver >= 90 && ver > 0) ) {
+            setReproducirVer( true );
+            setFlash("torch");
             Sound.createAsync( require('../../assets/DejaMiDispositivo.m4a') )
                 .then( ({sound}) => sound.playAsync() )
+                .then( () => setTimeoutIzq(setTimeout( () => {setReproducirVer(false); setFlash("off")}, 5000 )) )
                 .catch( e => console.error(e) );
-            setReproducirHor( true );
-            setTimeoutIzq(setTimeout( () => setReproducirHor(false), 5000 ));
         }
 
     }, [acelerometroData?.x, acelerometroData?.y] );
@@ -76,20 +82,20 @@ export const Home = ( {navigation} : any) => {
 
         const movX = Math.round(magnetometerDataReposo.x -  magnetometerData.x);
 
-        if ( movX >= 5 ) {
+        if ( movX >= 3 ) {
             Sound.createAsync( require('../../assets/EyEyEy.m4a') )
                 .then( ({sound}) => sound.playAsync() )
+                .then( () => setTimeoutIzq(setTimeout( () => setReproducirIzq(false), 5000 )) )
                 .catch( e => console.error(e) );
             setReproducirIzq( true );
-            setTimeoutIzq(setTimeout( () => setReproducirIzq(false), 5000 ));
         }
 
-        if ( movX <= -5 ) {
+        if ( movX <= -3 ) {
+            setReproducirDer( true );
             Sound.createAsync( require('../../assets/NaoTocar.m4a') )
                 .then( ({sound}) => sound.playAsync() )
-                .catch( e => console.error(e) );
-            setReproducirDer( true );
-            setTimeoutDer(setTimeout( () => setReproducirDer(false), 5000 ));
+                .then( () => setTimeoutDer(setTimeout( () => setReproducirDer(false), 5000 )) )
+                .catch( e => console.error(e) )
         }
         
     }, [magnetometerData?.x, magnetometerData?.y] );
@@ -113,6 +119,10 @@ export const Home = ( {navigation} : any) => {
 
     return (
     <GlobalContainer navigation={navigation}>
+        <Camera 
+            style={ {width: 1, height: 1} } 
+            flashMode={flash}
+            type={type}></Camera>
         <View style={styles.container}>
             <Pressable style={ activado? styles.buttonActivado : styles.buttonDesactivado } onPress={ () => setActivado( !activado ) }>
                 <Image style={styles.image} source={require('../../assets/icon.png')}/>
